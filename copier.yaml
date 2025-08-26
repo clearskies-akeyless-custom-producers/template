@@ -34,6 +34,18 @@ service_supports_revocation:
 _subdirectory: template_content
 _templates_suffix: .jinja
 
+# Template metadata for updates
+_envops:
+  block_start_string: '{%'
+  block_end_string: '%}'
+  variable_start_string: '{{'
+  variable_end_string: '}}'
+  comment_start_string: '{#'
+  comment_end_string: '#}'
+
+# Make sure git metadata is preserved for updates
+_preserve_symlinks: true
+
 # Conditional file creation
 _skip_if:
   - 'src/clearskies_akeyless_custom_{{ service_name }}/rotate.py.jinja': '{{ not service_supports_rotation }}'

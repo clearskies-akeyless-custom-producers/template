@@ -147,6 +147,25 @@ The generated project includes a `.pre-commit-config.yaml` file with the followi
 - **yamllint**: YAML file linting
 - **Standard hooks**: trailing whitespace, end-of-file-fixer, etc.
 
+## Updating Existing Projects
+
+If you have an existing project created from this template and want to update it with template changes:
+
+```bash
+cd your-existing-project
+copier update --trust
+```
+
+**Requirements for updates:**
+
+- Your project must be in a git repository with all changes committed
+- The project must have been created using the GitHub template URL (`gh:clearskies-akeyless-custom-producers/template`), not a local path
+- The `.copier-answers.yml` file must be present (automatically created during initial generation)
+
+**Important:** Updates only work when the original template was accessed via git (GitHub/GitLab URL). If you created your project from a local template path, updates won't work due to missing git reference tracking.
+
+**Note:** Updates will merge template changes with your custom implementation. Review the changes carefully before committing.
+
 ## Testing Your Implementation
 
 You can test your implementation with:
