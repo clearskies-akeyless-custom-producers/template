@@ -38,3 +38,12 @@ _templates_suffix: .jinja
 _skip_if:
   - 'src/clearskies_akeyless_custom_{{ service_name }}/rotate.py.jinja': '{{ not service_supports_rotation }}'
   - 'src/clearskies_akeyless_custom_{{ service_name }}/revoke.py.jinja': '{{ not service_supports_revocation }}'
+
+# Post-generation tasks
+_tasks:
+  - command: git init
+    description: Initialize git repository
+  - command: uv sync
+    description: Install dependencies and create virtual environment
+  - command: uv run pre-commit install
+    description: Install pre-commit hooks

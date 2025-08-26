@@ -17,10 +17,10 @@ def revoke(
 ) -> dict[str, Any]:
     """
     Revoke credentials for the {{ service_display_name }} service.
-    
+
     This function is called by Akeyless when credentials need to be revoked.
     Customize the parameter list above to match your service's revocation requirements.
-    
+
     Args:
         # TODO: Document your specific parameters here
         # Example parameter documentation:
@@ -31,20 +31,20 @@ def revoke(
         # password (str): Password for authentication
         # api_key (str): API key to be revoked
         # force_revoke (bool): Whether to force revocation even if errors occur
-        
+
         requests (requests.Session): HTTP session for making API calls (automatically injected)
         uuid (Any): Unique identifier for this operation (automatically injected)
-        
+
     Returns:
         dict[str, Any]: Dictionary containing revocation status information:
                        - 'success': Boolean indicating if revocation was successful
                        - 'revoked_tokens': List of revoked token IDs
                        - 'message': Human-readable message about the operation
                        - 'errors': List of any errors that occurred (optional)
-                       
+
     Raises:
         clearskies.exceptions.ClientError: If revocation fails
-        
+
     Examples:
         Simple token revocation:
         ```python
@@ -54,7 +54,7 @@ def revoke(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         OAuth2 token revocation:
         ```python
         def revoke(
@@ -65,7 +65,7 @@ def revoke(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         Project-based credential revocation:
         ```python
         def revoke(
@@ -76,7 +76,7 @@ def revoke(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         Database user revocation:
         ```python
         def revoke(

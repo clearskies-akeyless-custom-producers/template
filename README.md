@@ -20,8 +20,10 @@ pip install copier
 To create a new custom producer, run:
 
 ```bash
-copier copy gh:clearskies-akeyless-custom-producers/template my-producer
+copier copy gh:clearskies-akeyless-custom-producers/template my-producer --trust
 ```
+
+**Note:** The `--trust` flag is required because the template includes automated setup tasks (git init, dependency installation, and pre-commit hook setup).
 
 This will prompt you for the necessary information to configure your custom producer:
 
@@ -39,10 +41,11 @@ After generation, your project will have the following structure:
 ```
 my-producer/
 ├── .gitignore
+├── .pre-commit-config.yaml
 ├── LICENSE
 ├── MANIFEST.in
 ├── README.md
-├── uv.lock  (will be generated when you run uv install)
+├── uv.lock  (will be generated when you run uv sync)
 ├── pyproject.toml
 ├── ruff.toml
 └── src/
@@ -119,17 +122,30 @@ Each file contains comprehensive documentation and examples showing different pa
 
 ## Development
 
-To set up your development environment:
+To set up your development environment with pre-commit hooks:
 
 ```bash
 cd my-producer
 # Install uv if not already installed
 pip install uv
 
-# Install the project and development dependencies
-uv venv
-uv install --editable ".[dev]"
+# Install all dependencies (including dev dependencies)
+uv sync
+
+# Install pre-commit hooks
+uv run pre-commit install
+
+# Optionally, run pre-commit on all files to check everything is working
+uv run pre-commit run --all-files
 ```
+
+The generated project includes a `.pre-commit-config.yaml` file with the following tools:
+
+- **black**: Code formatting
+- **ruff**: Fast Python linter and formatter
+- **mypy**: Static type checking
+- **yamllint**: YAML file linting
+- **Standard hooks**: trailing whitespace, end-of-file-fixer, etc.
 
 ## Testing Your Implementation
 

@@ -17,10 +17,10 @@ def rotate(
 ) -> dict[str, Any]:
     """
     Rotate credentials for the {{ service_display_name }} service.
-    
+
     This function is called by Akeyless when credentials need to be rotated.
     Customize the parameter list above to match your service's rotation requirements.
-    
+
     Args:
         # TODO: Document your specific parameters here
         # Example parameter documentation:
@@ -31,10 +31,10 @@ def rotate(
         # current_username (str): Current username for authentication
         # current_password (str): Current password for authentication
         # force_rotation (bool): Whether to force rotation even if not expired
-        
+
         requests (requests.Session): HTTP session for making API calls (automatically injected)
         uuid (Any): Unique identifier for this operation (automatically injected)
-        
+
     Returns:
         dict[str, Any]: Dictionary containing the new credentials.
                        Structure should match what your create() function returns:
@@ -44,10 +44,10 @@ def rotate(
                        - 'username': New username
                        - 'password': New password
                        - 'expires_at': New expiration time
-                       
+
     Raises:
         clearskies.exceptions.ClientError: If rotation fails
-        
+
     Examples:
         Token rotation with existing token:
         ```python
@@ -57,7 +57,7 @@ def rotate(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         OAuth2 refresh token rotation:
         ```python
         def rotate(
@@ -68,7 +68,7 @@ def rotate(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         Project-based credential rotation:
         ```python
         def rotate(
@@ -80,7 +80,7 @@ def rotate(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         Database password rotation:
         ```python
         def rotate(

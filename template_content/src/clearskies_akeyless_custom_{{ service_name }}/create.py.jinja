@@ -17,10 +17,10 @@ def create(
 ) -> dict[str, Any]:
     """
     Create/fetch credentials from the {{ service_display_name }} service.
-    
+
     This function is called by Akeyless when a secret needs to be created or refreshed.
     Customize the parameter list above to match your service's requirements.
-    
+
     Args:
         # TODO: Document your specific parameters here
         # Example parameter documentation:
@@ -29,12 +29,12 @@ def create(
         # access_level (int): The access level for the credentials (e.g., 30 for developer)
         # scopes (list[str]): List of permission scopes (e.g., ['read_api', 'write_repository'])
         # username (str): Username for basic authentication
-        # password (str): Password for basic authentication  
+        # password (str): Password for basic authentication
         # expires_at (str | None): Expiration date in ISO format, optional
-        
+
         requests (requests.Session): HTTP session for making API calls (automatically injected)
         uuid (Any): Unique identifier for this operation (automatically injected)
-        
+
     Returns:
         dict[str, Any]: Dictionary containing the created credentials or tokens.
                        Structure depends on your service, commonly includes:
@@ -44,22 +44,22 @@ def create(
                        - 'username': Created username
                        - 'password': Generated password
                        - 'expires_at': Token expiration time
-                       
+
     Raises:
         clearskies.exceptions.ClientError: If credential creation fails
-        
+
     Examples:
         Simple token-based service:
         ```python
         def create(
             api_token: str,
-            requests: requests.Session, 
+            requests: requests.Session,
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         OAuth2 client credentials:
-        ```python  
+        ```python
         def create(
             client_id: str,
             client_secret: str,
@@ -68,7 +68,7 @@ def create(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         Project-based service with access levels:
         ```python
         def create(
@@ -81,7 +81,7 @@ def create(
             uuid: Any
         ) -> dict[str, Any]:
         ```
-        
+
         Database user creation:
         ```python
         def create(

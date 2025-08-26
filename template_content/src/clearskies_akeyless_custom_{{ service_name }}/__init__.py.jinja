@@ -13,23 +13,23 @@ from clearskies_akeyless_custom_{{ service_name }}.revoke import revoke
 class PayloadSchema(clearskies.Schema):
     """
     Schema defining the input parameters for your {{ service_display_name }} producer.
-    
+
     Customize this schema to match the parameters your create(), rotate(), and revoke()
     functions expect. The schema validates the JSON payload sent to Akeyless.
-    
+
     Examples:
         Simple API token:
         ```python
         api_token = columns.String(validators=[validators.Required()])
         ```
-        
+
         OAuth2 credentials:
         ```python
         client_id = columns.String(validators=[validators.Required()])
         client_secret = columns.String(validators=[validators.Required()])
         scopes = columns.String(default="read,write")  # comma-separated
         ```
-        
+
         Project-based access:
         ```python
         personal_access_token = columns.String(validators=[validators.Required()])
@@ -37,7 +37,7 @@ class PayloadSchema(clearskies.Schema):
         access_level = columns.Integer(default=30)  # 30 = Developer
         scopes = columns.String(default="read_api,read_user")
         ```
-        
+
         Database credentials:
         ```python
         admin_username = columns.String(validators=[validators.Required()])
@@ -48,7 +48,7 @@ class PayloadSchema(clearskies.Schema):
     """
     # TODO: Define your service-specific input parameters here
     # Replace these example fields with your actual requirements:
-    
+
     # Example fields (customize based on your service):
     # api_token = columns.String(
     #     validators=[validators.Required()],
@@ -69,7 +69,7 @@ class PayloadSchema(clearskies.Schema):
     # expires_at = columns.String(
     #     help="Expiration date in ISO format (optional)"
     # )
-    
+
     # Placeholder field - replace with your actual schema
     placeholder = columns.String(
         validators=[validators.Required()],
@@ -79,10 +79,10 @@ class PayloadSchema(clearskies.Schema):
 def build_{{ service_name }}_producer(url: str = "") -> clearskies_akeyless_custom_producer.endpoints.NoInput:
     """
     Build the {{ service_display_name }} producer with create/rotate/revoke endpoints.
-    
+
     Args:
         url (str): Optional URL prefix for the endpoints
-        
+
     Returns:
         clearskies_akeyless_custom_producer.endpoints.NoInput: The configured producer
     """
