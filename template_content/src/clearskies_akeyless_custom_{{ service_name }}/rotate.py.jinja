@@ -1,0 +1,98 @@
+import clearskies
+from typing import Any
+import requests
+
+def rotate(
+    # TODO: Add your service-specific parameters here with proper type hints
+    # Example parameters (customize based on your service):
+    # current_token: str,
+    # project_id: int,
+    # new_access_level: int | None = None,
+    # new_scopes: list[str] | None = None,
+    # current_username: str,
+    # current_password: str,
+    # force_rotation: bool = False,
+    requests: requests.Session,
+    uuid: Any
+) -> dict[str, Any]:
+    """
+    Rotate credentials for the {{ service_display_name }} service.
+    
+    This function is called by Akeyless when credentials need to be rotated.
+    Customize the parameter list above to match your service's rotation requirements.
+    
+    Args:
+        # TODO: Document your specific parameters here
+        # Example parameter documentation:
+        # current_token (str): The current API token to be rotated
+        # project_id (int): The project ID for the credentials
+        # new_access_level (int | None): New access level, or None to keep current
+        # new_scopes (list[str] | None): New permission scopes, or None to keep current
+        # current_username (str): Current username for authentication
+        # current_password (str): Current password for authentication
+        # force_rotation (bool): Whether to force rotation even if not expired
+        
+        requests (requests.Session): HTTP session for making API calls (automatically injected)
+        uuid (Any): Unique identifier for this operation (automatically injected)
+        
+    Returns:
+        dict[str, Any]: Dictionary containing the new credentials.
+                       Structure should match what your create() function returns:
+                       - 'token': New authentication token
+                       - 'access_token': New OAuth access token
+                       - 'api_key': New API key
+                       - 'username': New username
+                       - 'password': New password
+                       - 'expires_at': New expiration time
+                       
+    Raises:
+        clearskies.exceptions.ClientError: If rotation fails
+        
+    Examples:
+        Token rotation with existing token:
+        ```python
+        def rotate(
+            current_token: str,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+        
+        OAuth2 refresh token rotation:
+        ```python
+        def rotate(
+            refresh_token: str,
+            client_id: str,
+            client_secret: str,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+        
+        Project-based credential rotation:
+        ```python
+        def rotate(
+            current_access_token: str,
+            project_id: int,
+            token_id: str,
+            new_scopes: list[str] | None = None,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+        
+        Database password rotation:
+        ```python
+        def rotate(
+            admin_username: str,
+            admin_password: str,
+            target_username: str,
+            database_name: str,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+    """
+    # TODO: Implement your {{ service_display_name }} credential rotation logic here
+    # Use the parameters passed to this function to rotate the existing credentials
+    raise NotImplementedError("You need to implement the credential rotation logic for your {{ service_display_name }} service")

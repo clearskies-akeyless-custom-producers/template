@@ -1,0 +1,40 @@
+# Basic project information
+service_name:
+  type: str
+  help: Name of the service (e.g., gitlab, snyk, wiz)
+  default: myservice
+
+service_display_name:
+  type: str
+  help: Display name of the service (e.g., GitLab, Snyk, Wiz)
+  default: My Service
+
+# Author information
+author_name:
+  type: str
+  help: Your name
+  default: Conor Mancone
+
+author_email:
+  type: str
+  help: Your email
+  default: cmancone@gmail.com
+
+# Feature configuration
+service_supports_rotation:
+  type: bool
+  help: Does this service support credential rotation?
+  default: true
+
+service_supports_revocation:
+  type: bool
+  help: Does this service support credential revocation?
+  default: false
+
+_subdirectory: template_content
+_templates_suffix: .jinja
+
+# Conditional file creation
+_skip_if:
+  - 'src/clearskies_akeyless_custom_{{ service_name }}/rotate.py.jinja': '{{ not service_supports_rotation }}'
+  - 'src/clearskies_akeyless_custom_{{ service_name }}/revoke.py.jinja': '{{ not service_supports_revocation }}'

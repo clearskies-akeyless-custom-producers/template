@@ -1,0 +1,56 @@
+# {{ service_name }}
+
+{{ service_display_name }} dynamic producer for Akeyless
+
+The payload for this producer looks like:
+
+```
+{"placeholder": "[YOUR_PLACEHOLDER_VALUE_HERE]"}
+```
+
+Call `clearskies_akeyless_custom_{{ service_name }}.build_{{ service_name }}_producer()` to initialize the create{% if service_supports_rotation %}/rotate{% endif %}{% if service_supports_revocation %}/revoke{% endif %} endpoints.  You can
+optionally provide the `url` parameter which will add a prefix to the endpoints.  This can then be attached to a
+[clearskies context](https://clearskies.info/docs/context/index.html) or an [endpoint group](https://clearskies.info/docs/endpoint-groups/endpoint-groups.html):
+
+If used as a producer, it will use the provided credentials to fetch and return {{ service_display_name }} credentials or tokens.{% if service_supports_rotation %} It can also rotate the credentials you provide.{% endif %}{% if service_supports_revocation %} Additionally, it supports revoking credentials when they are no longer needed.{% endif %}
+
+## Installation
+
+```bash
+# Install uv if not already installed
+pip install uv
+
+# Create a virtual environment and install the package
+uv venv
+uv install .
+```
+
+## Usage Example
+
+```python
+import clearskies
+import clearskies_akeyless_custom_{{ service_name }}
+
+wsgi = clearskies.contexts.WsgiRef(
+    clearskies_akeyless_custom_{{ service_name }}.build_{{ service_name }}_producer()
+)
+wsgi()
+```
+
+Which you can test directly using calls like:
+
+```
+curl 'http://localhost:8080/sync/create' -d '{"payload":"{\"placeholder\":\"YOUR_VALUE_HERE\"}"}'
+
+{% if service_supports_rotation %}
+curl 'http://localhost:8080/sync/rotate' -d '{"payload":"{\"placeholder\":\"YOUR_VALUE_HERE\"}"}'
+{% endif %}
+
+{% if service_supports_revocation %}
+curl 'http://localhost:8080/sync/revoke' -d '{"payload":"{\"placeholder\":\"YOUR_VALUE_HERE\"}"}'
+{% endif %}
+```
+
+**NOTE:** Akeyless doesn't store your payload as JSON, even when you put in a JSON payload.  Instead, it ends up as a stringified-json
+(hence the escaped apostrophes in the above example commands).  This is normal, and normally invisible to you, unless you try to invoke the
+endpoints yourself.

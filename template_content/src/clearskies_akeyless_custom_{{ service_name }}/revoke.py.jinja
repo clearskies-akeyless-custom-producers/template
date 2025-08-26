@@ -1,0 +1,94 @@
+import clearskies
+from typing import Any
+import requests
+
+def revoke(
+    # TODO: Add your service-specific parameters here with proper type hints
+    # Example parameters (customize based on your service):
+    # token: str,
+    # project_id: int,
+    # token_id: str | None = None,
+    # username: str,
+    # password: str,
+    # api_key: str,
+    # force_revoke: bool = False,
+    requests: requests.Session,
+    uuid: Any
+) -> dict[str, Any]:
+    """
+    Revoke credentials for the {{ service_display_name }} service.
+    
+    This function is called by Akeyless when credentials need to be revoked.
+    Customize the parameter list above to match your service's revocation requirements.
+    
+    Args:
+        # TODO: Document your specific parameters here
+        # Example parameter documentation:
+        # token (str): The API token to be revoked
+        # project_id (int): The project ID for the credentials
+        # token_id (str | None): Specific token ID, or None to revoke all for user
+        # username (str): Username for authentication
+        # password (str): Password for authentication
+        # api_key (str): API key to be revoked
+        # force_revoke (bool): Whether to force revocation even if errors occur
+        
+        requests (requests.Session): HTTP session for making API calls (automatically injected)
+        uuid (Any): Unique identifier for this operation (automatically injected)
+        
+    Returns:
+        dict[str, Any]: Dictionary containing revocation status information:
+                       - 'success': Boolean indicating if revocation was successful
+                       - 'revoked_tokens': List of revoked token IDs
+                       - 'message': Human-readable message about the operation
+                       - 'errors': List of any errors that occurred (optional)
+                       
+    Raises:
+        clearskies.exceptions.ClientError: If revocation fails
+        
+    Examples:
+        Simple token revocation:
+        ```python
+        def revoke(
+            token: str,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+        
+        OAuth2 token revocation:
+        ```python
+        def revoke(
+            access_token: str,
+            client_id: str,
+            client_secret: str,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+        
+        Project-based credential revocation:
+        ```python
+        def revoke(
+            admin_token: str,
+            project_id: int,
+            target_username: str,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+        
+        Database user revocation:
+        ```python
+        def revoke(
+            admin_username: str,
+            admin_password: str,
+            target_username: str,
+            database_name: str,
+            requests: requests.Session,
+            uuid: Any
+        ) -> dict[str, Any]:
+        ```
+    """
+    # TODO: Implement your {{ service_display_name }} credential revocation logic here
+    # Use the parameters passed to this function to revoke the specified credentials
+    raise NotImplementedError("You need to implement the credential revocation logic for your {{ service_display_name }} service")
