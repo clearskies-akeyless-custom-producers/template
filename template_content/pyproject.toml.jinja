@@ -6,7 +6,7 @@ license = "MIT"
 readme = "./README.md"
 authors = [{name = "{{ author_name }}", email = "{{ author_email }}"}]
 requires-python = '>=3.11,<4.0'
-dependencies = ['clear-skies-akeyless-custom-producer>=2.0.0,<3.0.0', 'requests>=2.0.0,<3.0.0']
+dependencies = ['clear-skies>=2.0.0,<3.0.0', 'clear-skies-akeyless-custom-producer>=2.0.0,<3.0.0', 'requests>=2.0.0,<3.0.0']
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
@@ -54,7 +54,3 @@ exclude = [
  ".*_test\\.py$",
  "docs/.*"
 ]
-
-[tool.uv]
-venv-directory = ".venv"
-uv-lock-enabled = true
