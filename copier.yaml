@@ -13,12 +13,12 @@ service_display_name:
 author_name:
   type: str
   help: Your name
-  default: Conor Mancone
+  default:
 
 author_email:
   type: str
   help: Your email
-  default: cmancone@gmail.com
+  default:
 
 # Feature configuration
 service_supports_rotation:
@@ -55,17 +55,23 @@ _skip_if:
 _tasks:
   - command: git init
     description: Initialize git repository
+    when: "{{ _copier_operation == 'copy' }}"
   - command: uv sync
     description: Install dependencies and create virtual environment
   - command: uv run pre-commit install
     description: Install pre-commit hooks
+    when: "{{ _copier_operation == 'copy' }}"
   - command: git add .
     description: Stage all files
+    when: "{{ _copier_operation == 'copy' }}"
   - command: uv run pre-commit run --all-files || true
     description: Run pre-commit on all files
   - command: git add .
     description: Stage all files
+    when: "{{ _copier_operation == 'copy' }}"
   - command: "git commit -m 'Initial project setup'"
     description: Create initial commit
+    when: "{{ _copier_operation == 'copy' }}"
   - command: "echo 'Project setup complete! Next steps: activate your venv, start coding, and check the README for more info.'"
     description: Print next steps
+    when: "{{ _copier_operation == 'copy' }}"

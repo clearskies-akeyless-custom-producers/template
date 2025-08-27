@@ -9,6 +9,7 @@ repos:
       - id: check-added-large-files
       - id: mixed-line-ending
       - id: check-merge-conflict
+        args: [--assume-in-merge]
 
   - repo: https://github.com/psf/black
     rev: 25.1.0
@@ -36,11 +37,19 @@ repos:
       - id: yamllint
         args: [-d, relaxed]
 
-  -   repo: local
-      hooks:
-      -   id: pytest
-          name: pytest
-          entry: uv run pytest .
-          language: system
-          types: [python]
-          pass_filenames: false
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: uv run pytest .
+        language: system
+        types: [python]
+        pass_filenames: false
+    # Prevent committing .rej files
+      - id: forbidden-files
+        name: forbidden files
+        entry:
+            found Copier update rejection files; review and remove them before
+            merging.
+        language: fail
+        files: "\\.rej$"
