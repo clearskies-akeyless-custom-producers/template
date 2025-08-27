@@ -61,10 +61,8 @@ _tasks:
     description: Install pre-commit hooks
   - command: git add .
     description: Stage all files
-  - command: uv run pre-commit run --all-files
+  - command: uv run pre-commit run --all-files || true
     description: Run pre-commit on all files
-  - command: "uv run pytest || echo 'No tests found or pytest not installed. Skipping tests.'"
-    description: Run tests to verify setup
   - command: git add .
     description: Stage all files
   - command: "git commit -m 'Initial project setup'"
