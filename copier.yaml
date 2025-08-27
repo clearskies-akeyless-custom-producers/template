@@ -31,6 +31,11 @@ service_supports_revocation:
   help: Does this service support credential revocation?
   default: false
 
+package_name:
+  type: str
+  help: The name of the package to be created (e.g., myservice)
+  default: clearskies_akeyless_custom_{{ service_name|replace('-', '_') }}
+
 _subdirectory: template_content
 _templates_suffix: .jinja
 
@@ -48,8 +53,8 @@ _preserve_symlinks: true
 
 # Conditional file creation
 _skip_if:
-  - 'src/clearskies_akeyless_custom_{{ service_name }}/rotate.py.jinja': '{{ not service_supports_rotation }}'
-  - 'src/clearskies_akeyless_custom_{{ service_name }}/revoke.py.jinja': '{{ not service_supports_revocation }}'
+  - 'src/{{ package_name }}/rotate.py.jinja': '{{ not service_supports_rotation }}'
+  - 'src/{{ package_name }}/revoke.py.jinja': '{{ not service_supports_revocation }}'
 
 # Post-generation tasks
 _tasks:

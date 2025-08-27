@@ -8,7 +8,7 @@ The payload for this producer looks like:
 {"placeholder": "[YOUR_PLACEHOLDER_VALUE_HERE]"}
 ```
 
-Call `clearskies_akeyless_custom_{{ service_name }}.build_{{ service_name }}_producer()` to initialize the create{% if service_supports_rotation %}/rotate{% endif %}{% if service_supports_revocation %}/revoke{% endif %} endpoints.  You can
+Call `{{ package_name }}.build_{{ package_name }}_producer()` to initialize the create{% if service_supports_rotation %}/rotate{% endif %}{% if service_supports_revocation %}/revoke{% endif %} endpoints.  You can
 optionally provide the `url` parameter which will add a prefix to the endpoints.  This can then be attached to a
 [clearskies context](https://clearskies.info/docs/context/index.html) or an [endpoint group](https://clearskies.info/docs/endpoint-groups/endpoint-groups.html):
 
@@ -50,10 +50,10 @@ uv run pre-commit run --all-files
 
 ```python
 import clearskies
-import clearskies_akeyless_custom_{{ service_name }}
+import {{ package_name }}
 
 wsgi = clearskies.contexts.WsgiRef(
-    clearskies_akeyless_custom_{{ service_name }}.build_{{ service_name }}_producer()
+    {{ package_name }}.build_{{ service_name|replace('-', '_') }}_producer()
 )
 wsgi()
 ```

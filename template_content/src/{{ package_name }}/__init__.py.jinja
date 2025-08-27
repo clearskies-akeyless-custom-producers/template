@@ -4,12 +4,12 @@ import clearskies
 import clearskies_akeyless_custom_producer
 from clearskies import columns, validators
 
-from clearskies_akeyless_custom_{{ service_name }}.create import create
+from {{ package_name }}.create import create
 {%- if service_supports_revocation %}
-from clearskies_akeyless_custom_{{ service_name }}.revoke import revoke
+from {{ package_name }}.revoke import revoke
 {%- endif %}
 {%- if service_supports_rotation %}
-from clearskies_akeyless_custom_{{ service_name }}.rotate import rotate
+from {{ package_name }}.rotate import rotate
 {% endif %}
 
 class PayloadSchema(clearskies.Schema):
@@ -79,7 +79,9 @@ class PayloadSchema(clearskies.Schema):
     )
 
 
-def build_{{ service_name }}_producer(url: str = "") -> clearskies_akeyless_custom_producer.endpoints.NoInput:
+def build_{{ package_name }}_producer(
+    url: str = "",
+) -> clearskies_akeyless_custom_producer.endpoints.NoInput:
     """
     Build the {{ service_display_name }} producer with create/rotate/revoke endpoints.
 
