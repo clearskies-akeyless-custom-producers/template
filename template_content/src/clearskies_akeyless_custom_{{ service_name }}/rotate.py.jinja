@@ -1,6 +1,8 @@
-import clearskies
 from typing import Any
+
+import clearskies
 import requests
+
 
 def rotate(
     # TODO: Add your service-specific parameters here with proper type hints
@@ -13,7 +15,6 @@ def rotate(
     # current_password: str,
     # force_rotation: bool = False,
     requests: requests.Session,
-    uuid: Any
 ) -> dict[str, Any]:
     """
     Rotate credentials for the {{ service_display_name }} service.
@@ -33,17 +34,16 @@ def rotate(
         # force_rotation (bool): Whether to force rotation even if not expired
 
         requests (requests.Session): HTTP session for making API calls (automatically injected)
-        uuid (Any): Unique identifier for this operation (automatically injected)
 
     Returns:
         dict[str, Any]: Dictionary containing the new credentials.
-                       Structure should match what your create() function returns:
-                       - 'token': New authentication token
-                       - 'access_token': New OAuth access token
-                       - 'api_key': New API key
-                       - 'username': New username
-                       - 'password': New password
-                       - 'expires_at': New expiration time
+            Structure should match what your create() function returns:
+            - 'token': New authentication token
+            - 'access_token': New OAuth access token
+            - 'api_key': New API key
+            - 'username': New username
+            - 'password': New password
+            - 'expires_at': New expiration time
 
     Raises:
         clearskies.exceptions.ClientError: If rotation fails
@@ -53,8 +53,7 @@ def rotate(
         ```python
         def rotate(
             current_token: str,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
 
@@ -64,8 +63,7 @@ def rotate(
             refresh_token: str,
             client_id: str,
             client_secret: str,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
 
@@ -76,8 +74,7 @@ def rotate(
             project_id: int,
             token_id: str,
             new_scopes: list[str] | None = None,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
 
@@ -88,8 +85,7 @@ def rotate(
             admin_password: str,
             target_username: str,
             database_name: str,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
     """

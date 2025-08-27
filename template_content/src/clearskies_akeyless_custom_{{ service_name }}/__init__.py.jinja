@@ -1,13 +1,15 @@
+from typing import Any
+
 import clearskies
+import clearskies_akeyless_custom_producer
 from clearskies import columns, validators
 
-import clearskies_akeyless_custom_producer
 from clearskies_akeyless_custom_{{ service_name }}.create import create
-{% if service_supports_rotation %}
-from clearskies_akeyless_custom_{{ service_name }}.rotate import rotate
-{% endif %}
-{% if service_supports_revocation %}
+{%- if service_supports_revocation %}
 from clearskies_akeyless_custom_{{ service_name }}.revoke import revoke
+{%- endif %}
+{%- if service_supports_rotation %}
+from clearskies_akeyless_custom_{{ service_name }}.rotate import rotate
 {% endif %}
 
 class PayloadSchema(clearskies.Schema):
@@ -46,6 +48,7 @@ class PayloadSchema(clearskies.Schema):
         user_role = columns.String(default="readonly")
         ```
     """
+
     # TODO: Define your service-specific input parameters here
     # Replace these example fields with your actual requirements:
 
@@ -72,9 +75,9 @@ class PayloadSchema(clearskies.Schema):
 
     # Placeholder field - replace with your actual schema
     placeholder = columns.String(
-        validators=[validators.Required()],
-        help="Replace this with your actual service parameters"
+        validators=[validators.Required()], help="Replace this with your actual service parameters"
     )
+
 
 def build_{{ service_name }}_producer(url: str = "") -> clearskies_akeyless_custom_producer.endpoints.NoInput:
     """
@@ -88,12 +91,12 @@ def build_{{ service_name }}_producer(url: str = "") -> clearskies_akeyless_cust
     """
     return clearskies_akeyless_custom_producer.endpoints.NoInput(
         create_callable=create,
-        {% if service_supports_rotation %}
+        {%- if service_supports_rotation %}
         rotate_callable=rotate,
-        {% endif %}
-        {% if service_supports_revocation %}
+        {%- endif %}
+        {%- if service_supports_revocation %}
         revoke_callable=revoke,
-        {% endif %}
+        {%- endif %}
         payload_schema=PayloadSchema,
         url=url,
     )

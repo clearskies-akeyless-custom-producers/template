@@ -14,13 +14,12 @@ repos:
     rev: 25.1.0
     hooks:
       - id: black
-        language_version: python3
         files: \.py$
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.12.1
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: [--fix]
       - id: ruff-format
 
@@ -36,3 +35,12 @@ repos:
     hooks:
       - id: yamllint
         args: [-d, relaxed]
+
+  -   repo: local
+      hooks:
+      -   id: pytest
+          name: pytest
+          entry: uv run pytest .
+          language: system
+          types: [python]
+          pass_filenames: false

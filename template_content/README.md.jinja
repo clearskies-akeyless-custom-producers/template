@@ -35,6 +35,10 @@ pip install uv
 # Create a virtual environment and install all dependencies (including dev)
 uv sync
 
+
+# Install dev dependencies (including ruff, black, mypy) in the project environment
+uv pip install .[dev]
+
 # Install pre-commit hooks
 uv run pre-commit install
 

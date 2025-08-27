@@ -1,6 +1,8 @@
-import clearskies
 from typing import Any
+
+import clearskies
 import requests
+
 
 def create(
     # TODO: Add your service-specific parameters here with proper type hints
@@ -13,7 +15,6 @@ def create(
     # password: str,
     # expires_at: str | None = None,
     requests: requests.Session,
-    uuid: Any
 ) -> dict[str, Any]:
     """
     Create/fetch credentials from the {{ service_display_name }} service.
@@ -33,66 +34,61 @@ def create(
         # expires_at (str | None): Expiration date in ISO format, optional
 
         requests (requests.Session): HTTP session for making API calls (automatically injected)
-        uuid (Any): Unique identifier for this operation (automatically injected)
 
     Returns:
         dict[str, Any]: Dictionary containing the created credentials or tokens.
-                       Structure depends on your service, commonly includes:
-                       - 'token': Authentication token
-                       - 'access_token': OAuth access token
-                       - 'api_key': API key
-                       - 'username': Created username
-                       - 'password': Generated password
-                       - 'expires_at': Token expiration time
+            Structure depends on your service, commonly includes:
+            - 'token': Authentication token
+            - 'access_token': OAuth access token
+            - 'api_key': API key
+            - 'username': Created username
+            - 'password': Generated password
+            - 'expires_at': Token expiration time
 
     Raises:
         clearskies.exceptions.ClientError: If credential creation fails
 
     Examples:
         Simple token-based service:
-        ```python
-        def create(
-            api_token: str,
-            requests: requests.Session,
-            uuid: Any
-        ) -> dict[str, Any]:
-        ```
+            ```python
+            def create(
+                api_token: str,
+                requests: requests.Session
+            ) -> dict[str, Any]:
+            ```
 
         OAuth2 client credentials:
-        ```python
-        def create(
-            client_id: str,
-            client_secret: str,
-            scopes: list[str],
-            requests: requests.Session,
-            uuid: Any
-        ) -> dict[str, Any]:
-        ```
+            ```python
+            def create(
+                client_id: str,
+                client_secret: str,
+                scopes: list[str],
+                requests: requests.Session
+            ) -> dict[str, Any]:
+            ```
 
         Project-based service with access levels:
-        ```python
-        def create(
-            personal_access_token: str,
-            project_id: int,
-            access_level: int,
-            scopes: list[str],
-            expires_at: str | None = None,
-            requests: requests.Session,
-            uuid: Any
-        ) -> dict[str, Any]:
-        ```
+            ```python
+            def create(
+                personal_access_token: str,
+                project_id: int,
+                access_level: int,
+                scopes: list[str],
+                expires_at: str | None = None,
+                requests: requests.Session
+            ) -> dict[str, Any]:
+            ```
 
         Database user creation:
-        ```python
-        def create(
-            admin_username: str,
-            admin_password: str,
-            database_name: str,
-            user_role: str,
-            requests: requests.Session,
-            uuid: Any
-        ) -> dict[str, Any]:
-        ```
+            ```python
+            def create(
+                admin_username: str,
+                admin_password: str,
+                database_name: str,
+                user_role: str,
+                requests: requests.Session
+            ) -> dict[str, Any]:
+            ```
     """
     # TODO: Implement your {{ service_display_name }} credential creation logic here
     # Use the parameters passed to this function to authenticate with your service

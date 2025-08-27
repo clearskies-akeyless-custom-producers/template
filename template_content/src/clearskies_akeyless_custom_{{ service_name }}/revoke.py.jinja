@@ -1,6 +1,8 @@
-import clearskies
 from typing import Any
+
+import clearskies
 import requests
+
 
 def revoke(
     # TODO: Add your service-specific parameters here with proper type hints
@@ -13,7 +15,6 @@ def revoke(
     # api_key: str,
     # force_revoke: bool = False,
     requests: requests.Session,
-    uuid: Any
 ) -> dict[str, Any]:
     """
     Revoke credentials for the {{ service_display_name }} service.
@@ -33,14 +34,13 @@ def revoke(
         # force_revoke (bool): Whether to force revocation even if errors occur
 
         requests (requests.Session): HTTP session for making API calls (automatically injected)
-        uuid (Any): Unique identifier for this operation (automatically injected)
 
     Returns:
         dict[str, Any]: Dictionary containing revocation status information:
-                       - 'success': Boolean indicating if revocation was successful
-                       - 'revoked_tokens': List of revoked token IDs
-                       - 'message': Human-readable message about the operation
-                       - 'errors': List of any errors that occurred (optional)
+            - 'success': Boolean indicating if revocation was successful
+            - 'revoked_tokens': List of revoked token IDs
+            - 'message': Human-readable message about the operation
+            - 'errors': List of any errors that occurred (optional)
 
     Raises:
         clearskies.exceptions.ClientError: If revocation fails
@@ -50,8 +50,7 @@ def revoke(
         ```python
         def revoke(
             token: str,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
 
@@ -61,8 +60,7 @@ def revoke(
             access_token: str,
             client_id: str,
             client_secret: str,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
 
@@ -72,8 +70,7 @@ def revoke(
             admin_token: str,
             project_id: int,
             target_username: str,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
 
@@ -84,8 +81,7 @@ def revoke(
             admin_password: str,
             target_username: str,
             database_name: str,
-            requests: requests.Session,
-            uuid: Any
+            requests: requests.Session
         ) -> dict[str, Any]:
         ```
     """
