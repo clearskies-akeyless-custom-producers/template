@@ -1,8 +1,8 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: {%- if _copier_commit %}{{ _copier_commit }}{% endif %}
+_commit: "{{ _copier_answers.commit }}"
 _src_path: {{ _copier_conf.src_path }}
-author_email: {{ author_email }}
-author_name: {{ author_name }}
+author_email: "{{ author_email }}"
+author_name: "{{ author_name }}"
 service_display_name: {{ service_display_name }}
 service_name: {{ service_name }}
 service_supports_revocation: {{ service_supports_revocation }}
