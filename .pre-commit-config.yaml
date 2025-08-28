@@ -41,4 +41,4 @@ repos:
     rev: v1.35.1
     hooks:
       - id: yamllint
-        args: [-d, relaxed]
+        args: [-c=.yamllint]

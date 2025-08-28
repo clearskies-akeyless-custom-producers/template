@@ -45,8 +45,7 @@ jobs:
           enable-cache: true
       - name: Install dependencies
         run: uv sync --locked --all-extras --dev
-
-  - run: uv run mypy src --check || true
+      - run: uv run mypy src --check || true
 
   pytest:
     name: pytest
