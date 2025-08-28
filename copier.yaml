@@ -2,23 +2,19 @@
 service_name:
   type: str
   help: Name of the service (e.g., gitlab, snyk, wiz)
-  default: myservice
 
 service_display_name:
   type: str
   help: Display name of the service (e.g., GitLab, Snyk, Wiz)
-  default: My Service
 
 # Author information
 author_name:
   type: str
   help: Your name
-  default:
 
 author_email:
   type: str
   help: Your email
-  default:
 
 # Feature configuration
 service_supports_rotation:
@@ -29,12 +25,18 @@ service_supports_rotation:
 service_supports_revocation:
   type: bool
   help: Does this service support credential revocation?
-  default: false
+  default: true
 
 package_name:
   type: str
   help: The name of the package to be created (e.g., myservice)
   default: clearskies_akeyless_custom_{{ service_name|replace('-', '_') }}
+  when: false
+
+pypi_package_name:
+  type: str
+  help: The name of the PyPI package to be created (e.g., myservice)
+  default: clearskies-akeyless-custom-{{ service_name|replace('_', '-') | replace(' ', '-') }}
   when: false
 
 _subdirectory: template_content
