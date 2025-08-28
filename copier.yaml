@@ -35,6 +35,7 @@ package_name:
   type: str
   help: The name of the package to be created (e.g., myservice)
   default: clearskies_akeyless_custom_{{ service_name|replace('-', '_') }}
+  when: false
 
 _subdirectory: template_content
 _templates_suffix: .jinja
@@ -56,27 +57,35 @@ _skip_if:
   - 'src/{{ package_name }}/rotate.py.jinja': '{{ not service_supports_rotation }}'
   - 'src/{{ package_name }}/revoke.py.jinja': '{{ not service_supports_revocation }}'
 
+_skip_if_exists:
+    - "pyproject.toml"
+    - "uv.lock"
+    - 'src/{{ package_name }}/rotate.py'
+    - 'src/{{ package_name }}/revoke.py'
+    - 'src/{{ package_name }}/create.py'
+    - 'src/{{ package_name }}/__init__.py'
+
 # Post-generation tasks
 _tasks:
   - command: git init
     description: Initialize git repository
-    when: not _update
+    wwhen: "{{ _copier_operation == 'copy' }}"
   - command: uv sync
     description: Install dependencies and create virtual environment
   - command: uv run pre-commit install
     description: Install pre-commit hooks
-    when: not _update
+    when: "{{ _copier_operation == 'copy' }}"
   - command: git add .
     description: Stage all files
-    when: not _update
+    when: "{{ _copier_operation == 'copy' }}"
   - command: uv run pre-commit run --all-files || true
     description: Run pre-commit on all files
   - command: git add .
     description: Stage all files
-    when: not _update
+    when: "{{ _copier_operation == 'copy' }}"
   - command: "git commit -m 'Initial project setup'"
     description: Create initial commit
-    when: not _update
+    when: "{{ _copier_operation == 'copy' }}"
   - command: "echo 'Project setup complete! Next steps: activate your venv, start coding, and check the README for more info.'"
     description: Print next steps
-    when: not _update
+    when: "{{ _copier_operation == 'copy' }}"
