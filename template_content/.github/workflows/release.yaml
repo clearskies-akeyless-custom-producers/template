@@ -31,5 +31,5 @@ jobs:
       - name: Build and publish
         run: |
           echo 'Building version ${{ github.ref_name }}'
-          uv run python -m build
-          uv run twine upload -u __token__ -p ${{ steps.fetch-secrets.outputs.pypi }} dist/*
+          uv build ${{ github.ref_name }}
+          uv publish --token ${{ steps.fetch-secrets.outputs.pypi }}
