@@ -18,10 +18,23 @@ If used as a producer, it will use the provided credentials to fetch and return 
 
 ```bash
 # Install uv if not already installed
-pip install uv
+uv add {{ pypi_package_name }}
+```
 
-# Create a virtual environment and install dependencies
-uv sync
+```bash
+pip install {{ pypi_package_name }}
+```
+
+or
+
+```bash
+pipenv install {{ pypi_package_name }}
+```
+
+or
+
+```bash
+poetry add {{ pypi_package_name }}
 ```
 
 ## Development

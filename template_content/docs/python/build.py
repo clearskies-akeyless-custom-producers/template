@@ -1,0 +1,3 @@
+import clearskies_doc_builder
+
+clearskies_doc_builder.build(__file__)
