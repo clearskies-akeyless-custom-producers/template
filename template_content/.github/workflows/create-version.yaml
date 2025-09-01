@@ -59,14 +59,16 @@ jobs:
           echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Generate Changelog
-        id: changelog
+        id: changelog # Give the step an ID
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: |
+          args: | # All command-line flags go here
             --tag ${{ steps.bump.outputs.tag }}
             --prepend CHANGELOG.md
-            --output LATEST_CHANGELOG.md
+        env:
+          # Tell the action to save the LATEST changes to a file for the release body
+          OUTPUT: LATEST_CHANGELOG.md
 
       - name: Commit, Tag, and Push
         run: |
@@ -89,6 +91,6 @@ jobs:
         with:
           tag_name: ${{ steps.bump.outputs.tag }}
           release_name: "Release ${{ steps.bump.outputs.tag }}"
-          # Use the generated changelog file as the release body
-          body_path: LATEST_CHANGELOG.md
+          # Use the output from the previous step as the path to the release body
+          body_path: ${{ steps.changelog.outputs.changelog }}
           prerelease: ${{ contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc') }}
