@@ -60,7 +60,7 @@ jobs:
 
       - name: Generate Changelog
         id: changelog
-        uses: git-cliff/git-cliff-action@v4
+        uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
           # Use the tag from the bump step
