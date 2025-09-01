@@ -63,12 +63,10 @@ jobs:
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          # Use the tag from the bump step
-          tag: ${{ steps.bump.outputs.tag }}
-          # Prepend the new changelog to the existing CHANGELOG.md file
-          prepend: CHANGELOG.md
-          # Write the changelog for this release to a file for the release body
-          output: LATEST_CHANGELOG.md
+          args: |
+            --tag ${{ steps.bump.outputs.tag }}
+            --prepend CHANGELOG.md
+            --output LATEST_CHANGELOG.md
 
       - name: Commit, Tag, and Push
         run: |

@@ -17,13 +17,14 @@ body = """
 {% else %}\
     ## [Unreleased]
 {% endif %}\
-{% for group, commits in commits | group_by(attribute="group") | sort_by(attribute="group") %}\
+{% for group, commits in commits | group_by(attribute="group") %}\
     ### {{ group | upper_first }}
-    {% for commit in commits | sort_by(attribute="scope") %}\
+    {% for commit in commits %}\
         - {% if commit.scope %}**{{ commit.scope }}:** {% endif %}{{ commit.message | upper_first }}\
     {% endfor %}
 {% endfor %}\n
 """
+
 # A footer that is added to the changelog.
 footer = ""
 # Remove leading and trailing whitespaces from the changelog's body.
