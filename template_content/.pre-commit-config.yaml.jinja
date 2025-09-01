@@ -1,4 +1,19 @@
 # Pre-commit configuration for {{ service_display_name }} Akeyless Custom Producer
+fail_fast: true
+
+ci:
+    autofix_commit_msg: "chore(pre-commit): autofix run"
+    autoupdate_commit_msg: "chore(pre-commit): autoupdate hooks"
+
+default_install_hook_types:
+    - pre-commit
+    - commit-msg
+    - post-checkout
+    - post-merge
+    - post-rewrite
+
+default_stages: ["pre-commit"]
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
