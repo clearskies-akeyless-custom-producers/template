@@ -5,10 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.24] - 2025-09-02
+
+### Fixed
+- Undo auto delete not working
+
 ## [0.0.23] - 2025-09-02
 
 ### Added
 - Add auto delete branch for merged prs
+
+### Changed
+- Bump version to v0.0.23 by @github-actions[bot]
 
 ## [0.0.22] - 2025-09-02
 
@@ -168,6 +176,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## New Contributors
 * @ made their first contribution
+[0.0.24]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.23..v0.0.24
 [0.0.23]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.22..v0.0.23
 [0.0.22]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.21..v0.0.22
 [0.0.21]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.20..v0.0.21
