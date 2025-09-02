@@ -89,7 +89,7 @@ jobs:
 
       # STEP 5: Create the release
       - name: Create Stable GitHub Release
-        if: "!(contains(i#nputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc'))"
+        if: "!(contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc'))"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
