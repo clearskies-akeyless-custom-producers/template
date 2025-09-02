@@ -89,12 +89,21 @@ jobs:
           # Push the commit and the tag
           git push --follow-tags
 
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
+      - name: Create Stable GitHub Release
+        if: "!(contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc'))"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.bump.outputs.tag }}
-          release_name: "Release ${{ steps.bump.outputs.tag }}"
-          body_path: ${{ steps.changelog.outputs.changelog }}
-          prerelease: ${{ contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc') }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.bump.outputs.tag }} \
+            --title "Release ${{ steps.bump.outputs.tag }}" \
+            --notes-file ${{ steps.changelog.outputs.changelog }}
+
+      - name: Create Pre-Release on GitHub
+        if: "contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc')"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ steps.bump.outputs.tag }} \
+            --title "Release ${{ steps.bump.outputs.tag }}" \
+            --notes-file ${{ steps.changelog.outputs.changelog }} \
+            --prerelease
