@@ -60,20 +60,16 @@ jobs:
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --bump --output CHANGELOG.md
-        env:
-          # GIT_CLIFF_TAG is the environment variable for --tag, used here to name the bumped version
-          GIT_CLIFF_TAG: ${{ steps.bump.outputs.tag }}
+          args: --tag ${{ steps.bump.outputs.tag }} --output CHANGELOG.md
 
       - name: Extract Latest Changelog for Release Body
         id: changelog
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --bump --latest
+          args: --unreleased --tag ${{ steps.bump.outputs.tag }}
         env:
           OUTPUT: LATEST_CHANGELOG.md
-          GIT_CLIFF_TAG: ${{ steps.bump.outputs.tag }}
 
       # STEP 2: Commit all file changes together
       - name: Commit All Changes
@@ -93,7 +89,7 @@ jobs:
 
       # STEP 5: Create the release
       - name: Create Stable GitHub Release
-        if: "!(contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc'))"
+        if: "!(contains(i#nputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc'))"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
