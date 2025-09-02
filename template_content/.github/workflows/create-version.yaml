@@ -37,17 +37,16 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ... (Install uv and Configure Git steps remain the same) ...
-      - name: Configure Git author
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Install uv and set the python version
         uses: astral-sh/setup-uv@v6
         with:
           python-version: '3.12'
           enable-cache: true
+
+      - name: Configure Git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Bump version and get new tag
         id: bump
@@ -56,39 +55,43 @@ jobs:
           NEW_VERSION=$(grep '^version = ' pyproject.toml | cut -d '"' -f 2)
           echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      # STEP 1: Commit and Tag the version bump FIRST
-      - name: Commit and Tag the Version Bump
-        run: |
-          git add pyproject.toml
-          git commit -m "chore(release): bump version to ${{ steps.bump.outputs.tag }}"
-          git tag -a "${{ steps.bump.outputs.tag }}" -m "Release ${{ steps.bump.outputs.tag }}"
-
-      # STEP 2: Now that the tag exists, generate the changelog
-      - name: Update Main Changelog with New Release
+      # STEP 1: Generate all changelog files using the --bump flag
+      - name: Update Main Changelog File
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --tag ${{ steps.bump.outputs.tag }} --prepend CHANGELOG.md
+          args: --bump --output CHANGELOG.md
+        env:
+          # GIT_CLIFF_TAG is the environment variable for --tag, used here to name the bumped version
+          GIT_CLIFF_TAG: ${{ steps.bump.outputs.tag }}
 
-      # STEP 3: Extract the latest entry for the release body
       - name: Extract Latest Changelog for Release Body
         id: changelog
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --tag ${{ steps.bump.outputs.tag }} --latest
+          args: --bump --latest
         env:
           OUTPUT: LATEST_CHANGELOG.md
+          GIT_CLIFF_TAG: ${{ steps.bump.outputs.tag }}
 
-      # STEP 4: Commit the CHANGELOG.md changes and push everything
-      - name: Commit Changelog and Push All Changes
+      # STEP 2: Commit all file changes together
+      - name: Commit All Changes
         run: |
-          git add CHANGELOG.md
-          # Amend the previous commit to include the changelog
-          git commit --amend --no-edit
-          # Push the commit and the tag
+          git add pyproject.toml CHANGELOG.md
+          git commit -m "chore(release): bump version to ${{ steps.bump.outputs.tag }}"
+
+      # STEP 3: Create the tag for the final commit
+      - name: Create Git Tag
+        run: |
+          git tag -a "${{ steps.bump.outputs.tag }}" -m "Release ${{ steps.bump.outputs.tag }}"
+
+      # STEP 4: Push the commit and the tag
+      - name: Push All Changes
+        run: |
           git push --follow-tags
 
+      # STEP 5: Create the release
       - name: Create Stable GitHub Release
         if: "!(contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc'))"
         env:
