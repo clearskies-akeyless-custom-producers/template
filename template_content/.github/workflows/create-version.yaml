@@ -34,16 +34,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Fetch all history so uv can find the last tag
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install uv and set the python version
-        uses: astral-sh/setup-uv@v6
-        with:
-          python-version: '3.12'
-          enable-cache: true
-
+      # ... (Install uv and Configure Git steps remain the same) ...
       - name: Configure Git author
         run: |
           git config user.name "github-actions[bot]"
@@ -52,22 +46,25 @@ jobs:
       - name: Bump version and get new tag
         id: bump
         run: |
-          # Use uv to bump the version. This modifies pyproject.toml
           uv version --bump ${{ inputs.bump_type }}
-
-          # Read the new version directly from the file
           NEW_VERSION=$(grep '^version = ' pyproject.toml | cut -d '"' -f 2)
           echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      # STEP 1: Prepend the new tagged release to CHANGELOG.md
+      # STEP 1: Commit and Tag the version bump FIRST
+      - name: Commit and Tag the Version Bump
+        run: |
+          git add pyproject.toml
+          git commit -m "chore(release): bump version to ${{ steps.bump.outputs.tag }}"
+          git tag -a "${{ steps.bump.outputs.tag }}" -m "Release ${{ steps.bump.outputs.tag }}"
+
+      # STEP 2: Now that the tag exists, generate the changelog
       - name: Update Main Changelog with New Release
-        id: update-changelog
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: -vv --tag ${{ steps.bump.outputs.tag }} --prepend CHANGELOG.md
+          args: --tag ${{ steps.bump.outputs.tag }} --prepend CHANGELOG.md
 
-      # STEP 2: Extract the latest release notes for the GitHub Release body
+      # STEP 3: Extract the latest entry for the release body
       - name: Extract Latest Changelog for Release Body
         id: changelog
         uses: orhun/git-cliff-action@v4
@@ -77,20 +74,14 @@ jobs:
         env:
           OUTPUT: LATEST_CHANGELOG.md
 
-      - name: Commit, Tag, and Push
+      # STEP 4: Commit the CHANGELOG.md changes and push everything
+      - name: Commit Changelog and Push All Changes
         run: |
-          # Add both the pyproject.toml and the new CHANGELOG.md
-          git add pyproject.toml CHANGELOG.md
-
-          # Create a new commit for the version bump
-          git commit -m "chore(release): bump version to ${{ steps.bump.outputs.tag }}"
-
-          # Create an annotated tag
-          git tag -a "${{ steps.bump.outputs.tag }}" -m "Release ${{ steps.bump.outputs.tag }}"
-
-          # Push the commit and the new tag
-          git push
-          git push origin ${{ steps.bump.outputs.tag }}
+          git add CHANGELOG.md
+          # Amend the previous commit to include the changelog
+          git commit --amend --no-edit
+          # Push the commit and the tag
+          git push --follow-tags
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -99,6 +90,5 @@ jobs:
         with:
           tag_name: ${{ steps.bump.outputs.tag }}
           release_name: "Release ${{ steps.bump.outputs.tag }}"
-          # Use the output from the previous step as the path to the release body
           body_path: ${{ steps.changelog.outputs.changelog }}
           prerelease: ${{ contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc') }}
