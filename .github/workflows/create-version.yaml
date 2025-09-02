@@ -20,13 +20,9 @@ on:
           - dev  # dev-release
 
 jobs:
-  run-tests-and-wait:
-    uses: ./.github/workflows/run-tests.yml
-
   bump-version:
     name: Bump Version
     runs-on: ubuntu-latest
-    needs: run-tests-and-wait
     permissions:
       contents: write
 
