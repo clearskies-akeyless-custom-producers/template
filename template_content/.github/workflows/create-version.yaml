@@ -63,9 +63,7 @@ jobs:
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: | # All command-line flags go here
-            --tag ${{ steps.bump.outputs.tag }}
-            --prepend CHANGELOG.md
+          args: -vv --github-repo ${{ github.repository }} --tag ${{ steps.bump.outputs.tag }} --prepend CHANGELOG.md
         env:
           # Tell the action to save the LATEST changes to a file for the release body
           OUTPUT: LATEST_CHANGELOG.md
@@ -82,6 +80,7 @@ jobs:
           git tag -a "${{ steps.bump.outputs.tag }}" -m "Release ${{ steps.bump.outputs.tag }}"
 
           # Push the commit and the new tag
+          git push
           git push --follow-tags
 
       - name: Create GitHub Release
