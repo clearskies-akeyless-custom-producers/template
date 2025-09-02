@@ -67,7 +67,7 @@ jobs:
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --unreleased --tag ${{ steps.bump.outputs.tag }}
+          args: --unreleased --tag ${{ steps.bump.outputs.tag }} --strip all
         env:
           OUTPUT: LATEST_CHANGELOG.md
 
