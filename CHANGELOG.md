@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.20] - 2025-09-02
+
+### Fixed
+- Temlate typo
+
 ## [0.0.19] - 2025-09-02
+
+### Changed
+- Bump version to v0.0.19 by @github-actions[bot]
 
 ### Fixed
 - Update actions to create changelog
@@ -134,6 +142,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## New Contributors
 * @ made their first contribution
+[0.0.20]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.19..v0.0.20
 [0.0.19]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.18..v0.0.19
 [0.0.18]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.17..v0.0.18
 [0.0.17]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.15..v0.0.17
