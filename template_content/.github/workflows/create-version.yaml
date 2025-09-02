@@ -29,6 +29,7 @@ jobs:
     needs: run-tests-and-wait
     permissions:
       contents: write
+      id-token: write
 
     steps:
       - name: Checkout code
@@ -42,6 +43,9 @@ jobs:
         with:
           python-version: '3.12'
           enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
 
       - name: Configure Git author
         run: |
@@ -87,6 +91,10 @@ jobs:
         run: |
           git push --follow-tags
 
+      - name: uv build
+        run: |
+          uv build
+
       # STEP 5: Create the release
       - name: Create Stable GitHub Release
         if: "!(contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc'))"
@@ -95,7 +103,8 @@ jobs:
         run: |
           gh release create ${{ steps.bump.outputs.tag }} \
             --title "Release ${{ steps.bump.outputs.tag }}" \
-            --notes-file ${{ steps.changelog.outputs.changelog }}
+            --notes-file ${{ steps.changelog.outputs.changelog }} \
+            dist/* # <-- This uploads the build files
 
       - name: Create Pre-Release on GitHub
         if: "contains(inputs.bump_type, 'alpha') || contains(inputs.bump_type, 'beta') || contains(inputs.bump_type, 'rc')"
@@ -105,4 +114,16 @@ jobs:
           gh release create ${{ steps.bump.outputs.tag }} \
             --title "Release ${{ steps.bump.outputs.tag }}" \
             --notes-file ${{ steps.changelog.outputs.changelog }} \
-            --prerelease
+            --prerelease \
+            dist/* # <-- This uploads the build files
+
+      - name: Fetch pypi token from Akeyless
+        uses: LanceMcCarthy/akeyless-action@d42e07875b1cc7162afd290722babbaf879a86e6
+        id: fetch-secrets
+        with:
+          access-id: ${{ secrets.AKEYLESS_ACCESS_ID }}
+          static-secrets: '{"/pypi":"pypi"}'
+
+      - name: Publish to PyPi
+        run: |
+          uv publish --token ${{ steps.fetch-secrets.outputs.pypi }}
