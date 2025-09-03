@@ -83,7 +83,7 @@ _tasks:
   - command: git add .
     description: Stage all files
     when: "{{ _copier_operation == 'copy' }}"
-  - command: "git commit -m 'Initial project setup'"
+  - command: "git commit -m 'feat: Initial project setup'"
     description: Create initial commit
     when: "{{ _copier_operation == 'copy' }}"
   - command: "echo 'Project setup complete! Next steps: activate your venv, start coding, and check the README for more info.'"
