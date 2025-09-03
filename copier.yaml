@@ -6,6 +6,8 @@ service_name:
 service_display_name:
   type: str
   help: Display name of the service (e.g., GitLab, Snyk, Wiz)
+  default: "{{ service_name | replace('-', ' ') | title }}"
+
 
 # Author information
 author_name:
@@ -32,6 +34,11 @@ package_name:
   help: The name of the package to be created (e.g., myservice)
   default: clearskies_akeyless_custom_{{ service_name|replace('-', '_') }}
   when: false
+
+site_base_url:
+  type: str
+  help: The base url used for the documentation.
+  default: https://clearskies.info
 
 pypi_package_name:
   type: str
