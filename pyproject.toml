@@ -5,3 +5,6 @@ description = "A copier template for Clearskies Akeyless Custom Service Producer
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
+
+[tool.uv.workspace]
+members = ["template_content/docs/python"]
