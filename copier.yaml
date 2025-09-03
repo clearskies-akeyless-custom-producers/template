@@ -46,6 +46,17 @@ pypi_package_name:
   default: clearskies-akeyless-custom-{{ service_name|replace('_', '-') | replace(' ', '-') }}
   when: false
 
+docs_modules_location:
+  type: str
+  help: The location of the documentation modules.
+  default: modules/producers
+
+docs_modules_location_trimmed:
+  type: str
+  help: The trimmed location of the documentation modules.
+  default: "{{ docs_modules_location | regex_replace('^\\/|\\/$', '') }}"
+  when: false
+
 _subdirectory: template_content
 _templates_suffix: .jinja
 

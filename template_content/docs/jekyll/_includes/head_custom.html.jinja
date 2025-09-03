@@ -1,6 +1,6 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    fetch('/modules/producers/manifest.json')
+    fetch('/{{ docs_modules_location_trimmed }}/manifest.json')
       .then(response => response.ok ? response.json() : Promise.reject('Manifest not found'))
       .then(data => {
         const placeholder = document.getElementById('dynamic-nav-placeholder');
