@@ -5,11 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.26] - 2025-09-04
+
+### Fixed
+- Jekyll template
+
 ## [0.0.25] - 2025-09-04
 
 ### Added
 - Add docs by @tnijboer in [#1](https://github.com/clearskies-akeyless-custom-producers/template/pull/1)
 - Add uv lock
+
+### Changed
+- Bump version to v0.0.25 by @github-actions[bot]
 
 ### Fixed
 - Initial commit message
@@ -190,6 +198,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## New Contributors
 * @ made their first contribution
+[0.0.26]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.25..v0.0.26
 [0.0.25]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.24..v0.0.25
 [0.0.24]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.23..v0.0.24
 [0.0.23]: https://github.com/clearskies-akeyless-custom-producers/template/compare/v0.0.22..v0.0.23
