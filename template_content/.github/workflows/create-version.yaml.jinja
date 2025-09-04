@@ -166,3 +166,4 @@ jobs:
               aws s3 cp s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json . || touch manifest.json
               uv run update_manifest.py --pyproject_file=../../pyproject.toml --modules_location={{ docs_modules_location_trimmed }}
               aws s3 cp manifest.json s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json
+              echo "Updated manifest.json in S3"
