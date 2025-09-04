@@ -2,23 +2,21 @@
 service_name:
   type: str
   help: Name of the service (e.g., gitlab, snyk, wiz)
-  default: myservice
 
 service_display_name:
   type: str
   help: Display name of the service (e.g., GitLab, Snyk, Wiz)
-  default: My Service
+  default: "{{ service_name | replace('-', ' ') | title }}"
+
 
 # Author information
 author_name:
   type: str
   help: Your name
-  default:
 
 author_email:
   type: str
   help: Your email
-  default:
 
 # Feature configuration
 service_supports_rotation:
@@ -29,12 +27,34 @@ service_supports_rotation:
 service_supports_revocation:
   type: bool
   help: Does this service support credential revocation?
-  default: false
+  default: true
 
 package_name:
   type: str
   help: The name of the package to be created (e.g., myservice)
   default: clearskies_akeyless_custom_{{ service_name|replace('-', '_') }}
+  when: false
+
+site_base_url:
+  type: str
+  help: The base url used for the documentation.
+  default: https://clearskies.info
+
+pypi_package_name:
+  type: str
+  help: The name of the PyPI package to be created (e.g., myservice)
+  default: clearskies-akeyless-custom-{{ service_name|replace('_', '-') | replace(' ', '-') }}
+  when: false
+
+docs_modules_location:
+  type: str
+  help: The location of the documentation modules.
+  default: modules/producers
+
+docs_modules_location_trimmed:
+  type: str
+  help: The trimmed location of the documentation modules.
+  default: "{{ docs_modules_location | regex_replace('^\\/|\\/$', '') }}"
   when: false
 
 _subdirectory: template_content

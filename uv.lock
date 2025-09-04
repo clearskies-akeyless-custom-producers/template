@@ -1,6 +1,17 @@
 version = 1
-revision = 1
-requires-python = ">=3.11"
+revision = 3
+requires-python = ">=3.12"
+
+[manifest]
+members = [
+    "python",
+    "template",
+]
+
+[[package]]
+name = "python"
+version = "0.1.0"
+source = { virtual = "template_content/docs/python" }
 
 [[package]]
 name = "template"
