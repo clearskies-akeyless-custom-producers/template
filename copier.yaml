@@ -43,7 +43,7 @@ site_base_url:
 pypi_package_name:
   type: str
   help: The name of the PyPI package to be created (e.g., myservice)
-  default: clearskies-akeyless-custom-{{ service_name|replace('_', '-') | replace(' ', '-') }}
+  default: clear-skies-akeyless-custom-{{ service_name|replace('_', '-') | replace(' ', '-') }}
   when: false
 
 docs_modules_location:
