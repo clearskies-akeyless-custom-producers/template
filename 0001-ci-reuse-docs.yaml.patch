@@ -1,0 +1,166 @@
+From 3f8ff081c64c62d3633fb56a74f02d85f179a07d Mon Sep 17 00:00:00 2001
+From: Tom Nijboer <tom.nijboer@cimpress.com>
+Date: Tue, 9 Sep 2025 17:05:57 +0200
+Subject: [PATCH] ci: reuse docs.yaml
+
+---
+ .editorconfig                                 |  2 +-
+ .../workflows/create-version.yaml.jinja       | 40 ++--------
+ .../.github/workflows/docs.yaml.jinja         | 80 ++++++++++---------
+ 3 files changed, 49 insertions(+), 73 deletions(-)
+
+diff --git a/.editorconfig b/.editorconfig
+index 1deaad6..0346ba1 100644
+--- a/.editorconfig
++++ b/.editorconfig
+@@ -9,5 +9,5 @@ indent_style = space
+ indent_size = 4
+ trim_trailing_whitespace = true
+ 
+-[*.{yaml|yml}]
++[*.{yaml|yml|yaml\.jinja|yml\.jinja}]
+ indent_size = 2
+diff --git a/template_content/.github/workflows/create-version.yaml.jinja b/template_content/.github/workflows/create-version.yaml.jinja
+index 17c8606..e037313 100644
+--- a/template_content/.github/workflows/create-version.yaml.jinja
++++ b/template_content/.github/workflows/create-version.yaml.jinja
+@@ -129,41 +129,11 @@ jobs:
+         run: |
+           uv publish --token {% raw %}${{ steps.fetch-secrets.outputs.pypi }}{% endraw %}
+ 
+-  publish:
++  publish-docs:
+     name: Publish Doc Site to S3
+-    runs-on: ubuntu-latest
+     needs: bump-version
+     permissions:
+-        id-token: write
+-        contents: read
+-    steps:
+-        - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+-          with:
+-              persist-credentials: false
+-        - name: configure aws credentials
+-          uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+-          with:
+-              role-to-assume: {% raw %}${{ secrets.AWS_ROLE_ARN }}{% endraw %}
+-              role-session-name: docs-deploy
+-              aws-region: us-east-1
+-        - name: Install uv
+-          uses: astral-sh/setup-uv@v6
+-        - name: Publish
+-          run: |
+-              cd docs/python
+-              uv run build.py
+-              sudo apt update
+-              sudo apt-get install -y ruby ruby-dev jq
+-              sudo gem install bundler
+-              cd ../build
+-              cp ../../README.md _includes/project_readme.md
+-              cp ../../CHANGELOG.md _includes/project_changelog.md
+-              sudo bundle install
+-              sudo bundle exec jekyll build
+-              cd _site
+-              aws s3 sync --delete . s3://clearskies.info/{{ docs_modules_location_trimmed }}/{{ pypi_package_name }}/
+-              cd ../../python
+-              aws s3 cp s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json . || touch manifest.json
+-              uv run update_manifest.py --pyproject_file=../../pyproject.toml --modules_location={{ docs_modules_location_trimmed }}
+-              aws s3 cp manifest.json s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json
+-              echo "Updated manifest.json in S3"
++      id-token: write
++      contents: read
++    secrets: inherit
++    uses: ./.github/workflows/docs.yaml
+diff --git a/template_content/.github/workflows/docs.yaml.jinja b/template_content/.github/workflows/docs.yaml.jinja
+index 0cb0b16..df72981 100644
+--- a/template_content/.github/workflows/docs.yaml.jinja
++++ b/template_content/.github/workflows/docs.yaml.jinja
+@@ -2,42 +2,48 @@ name: Doc Publish
+ 
+ on:
+   workflow_dispatch:
++  workflow_call:
+ 
+ jobs:
+-    publish:
+-        if: github.ref == 'refs/heads/main'
+-        name: Publish Doc Site to S3
+-        runs-on: ubuntu-latest
+-        permissions:
+-            id-token: write
+-            contents: read
+-        steps:
+-            - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+-              with:
+-                  persist-credentials: false
+-            - name: configure aws credentials
+-              uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+-              with:
+-                  role-to-assume: {% raw %}${{ secrets.AWS_ROLE_ARN }}{% endraw %}
+-                  role-session-name: docs-deploy
+-                  aws-region: us-east-1
+-            - name: Install uv
+-              uses: astral-sh/setup-uv@v6
+-            - name: Publish
+-              run: |
+-                  cd docs/python
+-                  uv run build.py
+-                  sudo apt update
+-                  sudo apt-get install -y ruby ruby-dev jq
+-                  sudo gem install bundler
+-                  cd ../build
+-                  cp ../../README.md _includes/project_readme.md
+-                  cp ../../CHANGELOG.md _includes/project_changelog.md
+-                  sudo bundle install
+-                  sudo bundle exec jekyll build
+-                  cd _site
+-                  aws s3 sync --delete . s3://clearskies.info/{{ docs_modules_location_trimmed }}/{{ pypi_package_name }}/
+-                  cd ../../python
+-                  aws s3 cp s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json . || touch manifest.json
+-                  uv run update_manifest.py --pyproject_file=../../pyproject.toml --modules_location={{ docs_modules_location_trimmed }}
+-                  aws s3 cp manifest.json s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json
++  publish:
++    if: github.ref == 'refs/heads/main'
++    name: Publish Doc Site to S3
++    runs-on: ubuntu-latest
++    permissions:
++      id-token: write
++      contents: read
++    steps:
++      - name: Checkout code
++        uses: actions/checkout@v4
++        with:
++          fetch-depth: 0
++          token: ${{ secrets.GITHUB_TOKEN }}
++      - name: configure aws credentials
++        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
++        with:
++          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
++          role-session-name: docs-deploy
++          aws-region: us-east-1
++      - name: Install uv and set the python version
++        uses: astral-sh/setup-uv@v6
++        with:
++          python-version: '3.12'
++          enable-cache: true
++      - name: Publish
++        run: |
++            cd docs/python
++            uv run build.py
++            sudo apt update
++            sudo apt-get install -y ruby ruby-dev jq
++            sudo gem install bundler
++            cd ../build
++            cp ../../README.md _includes/project_readme.md
++            cp ../../CHANGELOG.md _includes/project_changelog.md
++            sudo bundle install
++            sudo bundle exec jekyll build
++            cd _site
++            aws s3 sync --delete . s3://clearskies.info/{{ docs_modules_location_trimmed }}/{{ pypi_package_name }}/
++            cd ../../python
++            aws s3 cp s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json . || touch manifest.json
++            uv run update_manifest.py --pyproject_file=../../pyproject.toml --modules_location={{ docs_modules_location_trimmed }}
++            aws s3 cp manifest.json s3://clearskies.info/{{ docs_modules_location_trimmed }}/manifest.json
+-- 
+2.51.0
+
